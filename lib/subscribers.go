@@ -14,6 +14,7 @@ import (
 type ISubscribers interface {
 	Identify(ctx context.Context, subscriberID string, data interface{}) (SubscriberResponse, error)
 	Get(ctx context.Context, subscriberID string) (SubscriberResponse, error)
+	GetAll(ctx context.Context) (PaginatedSubscribersResponse, error)
 	Update(ctx context.Context, subscriberID string, data interface{}) (SubscriberResponse, error)
 	Delete(ctx context.Context, subscriberID string) (SubscriberResponse, error)
 	GetNotificationFeed(ctx context.Context, subscriberID string, opts *SubscriberNotificationFeedOptions) (*SubscriberNotificationFeedResponse, error)
@@ -52,6 +53,23 @@ func (s *SubscriberService) Identify(ctx context.Context, subscriberID string, d
 func (s *SubscriberService) Get(ctx context.Context, subscriberID string) (SubscriberResponse, error) {
 	var resp SubscriberResponse
 	URL := s.client.config.BackendURL.JoinPath("subscribers", subscriberID)
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, URL.String(), http.NoBody)
+	if err != nil {
+		return resp, err
+	}
+
+	_, err = s.client.sendRequest(req, &resp)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+func (s *SubscriberService) GetAll(ctx context.Context) (PaginatedSubscribersResponse, error) {
+	var resp PaginatedSubscribersResponse
+	URL := s.client.config.BackendURL.JoinPath("subscribers")
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, URL.String(), http.NoBody)
 	if err != nil {

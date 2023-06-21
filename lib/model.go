@@ -93,6 +93,13 @@ type SubscriberResponse struct {
 	Data interface{} `json:"data"`
 }
 
+type PaginatedSubscribersResponse struct {
+	Page       int                  `json:"page"`
+	TotalCount int                  `json:"totalCount"`
+	PageSize   int                  `json:"pageSize"`
+	Data       []SubscriberResponse `json:"data"`
+}
+
 type Template struct {
 	ID       string `json:"_id"`
 	Name     string `json:"name"`
