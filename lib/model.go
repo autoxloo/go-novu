@@ -80,6 +80,13 @@ type EventResponse struct {
 	Data interface{} `json:"data"`
 }
 
+type TriggerEventResponseDto struct {
+	Acknowledged  bool     `json:"acknowledged" validate:"required"`
+	Status        string   `json:"status" validate:"required"`
+	Error         []string `json:"error,omitempty"`
+	TransactionID string   `json:"transactionId,omitempty"`
+}
+
 type EventRequest struct {
 	Name          string      `json:"name"`
 	To            interface{} `json:"to"`
@@ -90,14 +97,52 @@ type EventRequest struct {
 }
 
 type SubscriberResponse struct {
-	Data interface{} `json:"data"`
+	ID             string      `json:"_id,omitempty"`
+	FirstName      string      `json:"firstName,omitempty"`
+	LastName       string      `json:"lastName,omitempty"`
+	Email          string      `json:"email,omitempty"`
+	Phone          string      `json:"phone,omitempty"`
+	Avatar         string      `json:"avatar,omitempty"`
+	Locale         string      `json:"locale,omitempty"`
+	SubscriberID   string      `json:"subscriberId"`
+	Channels       interface{} `json:"channels,omitempty"`
+	IsOnline       bool        `json:"isOnline,omitempty"`
+	LastOnlineAt   string      `json:"lastOnlineAt,omitempty"`
+	OrganizationID string      `json:"_organizationId,omitempty"`
+	EnvironmentID  string      `json:"_environmentId,omitempty"`
+	Deleted        bool        `json:"deleted,omitempty"`
+	CreatedAt      string      `json:"createdAt,omitempty"`
+	UpdatedAt      string      `json:"updatedAt,omitempty"`
+	V              *int        `json:"__v,omitempty"`
+	Data           interface{} `json:"data,omitempty"`
 }
 
 type PaginatedSubscribersResponse struct {
-	Page       int                  `json:"page"`
-	TotalCount int                  `json:"totalCount"`
-	PageSize   int                  `json:"pageSize"`
-	Data       []SubscriberResponse `json:"data"`
+	Page       int                     `json:"page"`
+	TotalCount int                     `json:"totalCount"`
+	PageSize   int                     `json:"pageSize"`
+	Data       []SubscriberResponseDto `json:"data"`
+}
+
+type SubscriberResponseDto struct {
+	ID             string        `json:"_id,omitempty"`
+	FirstName      string        `json:"firstName,omitempty"`
+	LastName       string        `json:"lastName,omitempty"`
+	Email          string        `json:"email,omitempty"`
+	Phone          string        `json:"phone,omitempty"`
+	Avatar         string        `json:"avatar,omitempty"`
+	Locale         string        `json:"locale,omitempty"`
+	SubscriberID   string        `json:"subscriberId"`
+	Channels       []interface{} `json:"channels,omitempty"`
+	IsOnline       bool          `json:"isOnline,omitempty"`
+	LastOnlineAt   string        `json:"lastOnlineAt,omitempty"`
+	OrganizationID string        `json:"_organizationId,omitempty"`
+	EnvironmentID  string        `json:"_environmentId,omitempty"`
+	Deleted        bool          `json:"deleted,omitempty"`
+	CreatedAt      string        `json:"createdAt,omitempty"`
+	UpdatedAt      string        `json:"updatedAt,omitempty"`
+	V              *int          `json:"__v,omitempty"`
+	Data           interface{}   `json:"data,omitempty"`
 }
 
 type Template struct {

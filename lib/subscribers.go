@@ -22,6 +22,8 @@ type ISubscribers interface {
 	MarkMessageSeen(ctx context.Context, subscriberID string, opts SubscriberMarkMessageSeenOptions) (*SubscriberNotificationFeedResponse, error)
 	GetPreferences(ctx context.Context, subscriberID string) (*SubscriberPreferencesResponse, error)
 	UpdatePreferences(ctx context.Context, subscriberID string, templateId string, opts *UpdateSubscriberPreferencesOptions) (*SubscriberPreferencesResponse, error)
+	UpdateOnlineStatus(ctx context.Context, subscriberID string, data interface{}) (SubscriberResponse, error)
+	UpdateCredentials(ctx context.Context, subscriberID string, data interface{}) (SubscriberResponse, error)
 }
 
 type SubscriberService service
@@ -91,6 +93,44 @@ func (s *SubscriberService) Update(ctx context.Context, subscriberID string, dat
 	jsonBody, _ := json.Marshal(data)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPut, URL.String(), bytes.NewBuffer(jsonBody))
+	if err != nil {
+		return resp, err
+	}
+
+	_, err = s.client.sendRequest(req, &resp)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+func (s *SubscriberService) UpdateOnlineStatus(ctx context.Context, subscriberID string, data interface{}) (SubscriberResponse, error) {
+	var resp SubscriberResponse
+	URL := s.client.config.BackendURL.JoinPath("subscribers", subscriberID)
+
+	jsonBody, _ := json.Marshal(data)
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPatch, URL.String(), bytes.NewBuffer(jsonBody))
+	if err != nil {
+		return resp, err
+	}
+
+	_, err = s.client.sendRequest(req, &resp)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+func (s *SubscriberService) UpdateCredentials(ctx context.Context, subscriberID string, data interface{}) (SubscriberResponse, error) {
+	var resp SubscriberResponse
+	URL := s.client.config.BackendURL.JoinPath("subscribers", subscriberID, "credentials")
+
+	jsonBody, _ := json.Marshal(data)
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPatch, URL.String(), bytes.NewBuffer(jsonBody))
 	if err != nil {
 		return resp, err
 	}
